@@ -37,7 +37,7 @@ int main()
 	
   long iTimeTaken = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)); //in micro-sec
   
-  printf("Numerator = %ld", (2+2) * iLoopCntr * iThreadCnt * (256/32) * 1000000));
+  printf("Numerator = %ld", (2+2) * iLoopCntr * iThreadCnt * (256/32) * 1000000);
   printf("Time taken to run the code = %ld micro-sec.\n", iTimeTaken);
 
   printf("Number of flops = %ld per sec.\n", ((2+2) * iLoopCntr * iThreadCnt * (256/32) * 1000000) / (iTimeTaken)); //per sec
