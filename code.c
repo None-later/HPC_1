@@ -6,28 +6,39 @@
 
 int main()
 { 
-  int imFlops = 0, iThreadCnt = 1, iLoopCntr = 10000000;
+  int imFlops = 0, iThreadCnt = 1, iLoopCntr = 1000*1000*1000;
 
   struct timeval start, end;
-
-  //initializing variables...
-  __m256d a = _mm256_setr_pd(4.0, 5.0, 13.0, 6.0);
-  __m256d b = _mm256_setr_pd(9.0, 3.0, 6.0, 7.0);
-  __m256d c = _mm256_setr_pd(1.0, -1.0, 1.0, -1.0);
 
   //start timer..
   gettimeofday(&start, NULL);
 
   #pragma omp parallel
-  {	
-	  
+  {
 	  iThreadCnt = omp_get_num_threads();
-
-	  for(int i=0; i<iLoopCntr; i++)
+	  
+	  //initializing variables...
+	  __m256d a = _mm256_setr_pd(4.0, 5.0, 13.0, 6.0);
+      __m256d b = _mm256_setr_pd(9.0, 3.0, 6.0, 7.0);
+      __m256d c = _mm256_setr_pd(1.0, 1.0, 1.0, 1.0);
+	  __m256d d = _mm256_setr_pd(4.0, 5.0, 13.0, 6.0);
+      __m256d e = _mm256_setr_pd(9.0, 3.0, 6.0, 7.0);
+      __m256d f = _mm256_setr_pd(1.0, 1.0, 1.0, 1.0);
+	  __m256d g = _mm256_setr_pd(4.0, 5.0, 13.0, 6.0);
+      __m256d h = _mm256_setr_pd(9.0, 3.0, 6.0, 7.0);
+      __m256d i = _mm256_setr_pd(1.0, 1.0, 1.0, 1.0);
+	  __m256d j = _mm256_setr_pd(4.0, 5.0, 13.0, 6.0);
+      __m256d k = _mm256_setr_pd(9.0, 3.0, 6.0, 7.0);
+      __m256d l = _mm256_setr_pd(1.0, 1.0, 1.0, 1.0);
+	  
+	  
+	  for(int i=0; i < iLoopCntr; i++)
 	  {
 		_mm256_fmadd_pd(a, b, c);
-		//_mm256_fmadd_pd(a, b, c);
-	        asm("");
+		_mm256_fmadd_pd(d, e, f);
+		_mm256_fmadd_pd(g, h, i);
+		_mm256_fmadd_pd(j, k, l);
+	    asm("");
 	  }
   } 		
 
@@ -37,12 +48,8 @@ int main()
 	
   long iTimeTaken = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)); //in micro-sec
   
-  printf("Numerator = %ld", (2+2) * iLoopCntr * iThreadCnt * (256/32) * 1000000);
-  printf("Time taken to run the code = %ld micro-sec.\n", iTimeTaken);
-
-  printf("Number of flops = %ld per sec.\n", ((2+2) * iLoopCntr * iThreadCnt * (256/32) * 1000000) / (iTimeTaken)); //per sec
-  //Do we need to multiple with 256/32?
-  // (2+2) for [2 <- checking i<iLoopCntr and i++] and [Fused Multiply add]
+  printf("Number of flops = %f per sec.\n", (2 * (float)iLoopCntr * iThreadCnt * (256/32) * 1000000) / (float)iTimeTaken); //per sec
+  // (2) for [Fused Multiply add]
 
   return 0;
 }
